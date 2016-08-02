@@ -11,19 +11,22 @@
 
 using std::vector;
 
-void collideAll(Quadtree * node) {
+int collideAll(Quadtree * node) {
+    int collisions = 0;
     vector<Quadtree *> nodes = node->getAllNodes();
     for (int j = 0; j < nodes.size(); j++) {
-        collide(nodes.at(j));
+        collisions += collide(nodes.at(j));
     }
-    
+    return collisions;
 }
 
-void collide(Quadtree * node) {
+int collide(Quadtree * node) {
+    int collisions = 0;
     auto shapes = node->getElements();
     for (int k = 0; k < shapes->size(); k++) {
         for (int l = k; ++l < shapes->size(); l++) {
             shapes->at(k)->isColide(*shapes->at(l));
+            collisions++;
         }
     }
     Quadtree * parent = node;
@@ -32,9 +35,10 @@ void collide(Quadtree * node) {
         for (int k = 0; k < shapes->size(); k++) {
             for (int l = 0; l < parentShapes->size(); l++) {
                 shapes->at(k)->isColide(*parentShapes->at(l));
+                collisions++;
             }
         }
         
     }
-
+    return collisions;
 }

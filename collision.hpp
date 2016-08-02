@@ -13,8 +13,8 @@
 #include "quadtree.hpp"
 
 
-void collideAll(Quadtree * node);
-void collide(Quadtree * node);
+int collideAll(Quadtree * node);
+int collide(Quadtree * node);
 
 
 #endif /* collision_hpp */

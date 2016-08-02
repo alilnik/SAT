@@ -65,11 +65,11 @@ void testWithQuadtree() {
         
         clock_t begin = clock();
         
-        collideAll(&qt);
+        int collisions = collideAll(&qt);
         clock_t end = clock();
         double timeInSeconds = double(end - begin) / CLOCKS_PER_SEC;
         
-        std::cout << timeInSeconds << " sec, " << "Quadtree making - " << qtTimeInSeconds << " sec" << std::endl;
+        std::cout << timeInSeconds << " sec, " << "Quadtree making - " << qtTimeInSeconds << " sec, with " << collisions << " collisions" << std::endl;
     }
     std::cout << "=======================" << std::endl;
 }

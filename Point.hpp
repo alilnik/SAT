@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <cmath>
+//#include "utils.hpp"
 
 class Point {
 private:
@@ -48,7 +49,6 @@ public:
     Point operator+ (Point b) {
         return Point(x + b.getX(), y + b.getY());
     }
-    
 };
 
 #endif /* Point_hpp */

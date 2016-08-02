@@ -12,6 +12,7 @@
 #include "Point.hpp"
 #include <vector>
 
+
 double min(double a, double b);
 double max(double a, double b);
 
@@ -27,6 +28,10 @@ public:
     
     Point center() {
         return Point(left / 2 + right / 2, up / 2 + down / 2);
+    }
+    
+    bool isInside(Point p) {
+        return p.getX() >= left && p.getX() <= right && p.getY() >= down && p.getY() <= up;
     }
 };
 

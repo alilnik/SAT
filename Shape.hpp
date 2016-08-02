@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <vector>
 #include "Axis.hpp"
+#include "utils.hpp"
 
 class Shape {
 public:
@@ -21,6 +22,7 @@ public:
     virtual double* project(Axis axis) = 0;
     bool isColide(Shape & other);
     virtual Point getCenter() = 0;
+    virtual bool isInside(rect * r) = 0;
 };
 
 #endif /* Shape_hpp */

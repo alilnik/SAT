@@ -25,6 +25,7 @@ public:
     double* project(Axis axis);
     ~Sphere();
     Point getCenter();
+    bool isInside(rect * r);
 };
 
 #endif /* Sphere_hpp */

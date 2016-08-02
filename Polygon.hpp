@@ -25,6 +25,7 @@ public:
     double* project(Axis axis);
     ~Polygon();
     Point getCenter();
+    bool isInside(rect * r);
 };
 
 #endif /* Polygon_hpp */

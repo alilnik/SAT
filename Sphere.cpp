@@ -46,3 +46,11 @@ double* Sphere::project(Axis axis) {
 Point Sphere::getCenter() {
     return center;
 }
+
+bool Sphere::isInside(rect * r) {
+    Point left  = Point(-radious, 0) + center;
+    Point right = Point(radious, 0)  + center;
+    Point up    = Point(0, radious)  + center;
+    Point down  = Point(0, -radious) + center;
+    return r->isInside(left) && r->isInside(right) && r->isInside(up) && r->isInside(down);
+}

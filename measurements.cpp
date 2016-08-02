@@ -14,6 +14,8 @@
 #include "Sphere.hpp"
 #include "Polygon.hpp"
 
+#include "collision.hpp"
+
 
 double inline r() {
     return 1.0 * rand() / RAND_MAX;
@@ -56,23 +58,14 @@ void testWithQuadtree() {
         
         clock_t qtBegin = clock();
         for (int j = 0; j < sizes[i]; j++) {
-            qt.insert(new Sphere(Point(r(), r()), r()));
+            qt.insert(new Sphere(Point(r(), r()), r() / 1000000));
         }
         clock_t qtEnd = clock();
         double qtTimeInSeconds = double(qtEnd - qtBegin) / CLOCKS_PER_SEC;
         
-        
-        
-        vector<Quadtree *> leafNodes = qt.getLeafNodes();
         clock_t begin = clock();
-        for (int j = 0; j < leafNodes.size(); j++) {
-            auto shapes = leafNodes.at(j)->getElements();
-            for (int k = 0; k < shapes->size(); k++) {
-                for (int l = k; ++l < shapes->size(); l++) {
-                    shapes->at(k)->isColide(*shapes->at(l));
-                }
-            }
-        }
+        
+        collideAll(&qt);
         clock_t end = clock();
         double timeInSeconds = double(end - begin) / CLOCKS_PER_SEC;
         
@@ -82,6 +75,6 @@ void testWithQuadtree() {
 }
 
 void runMeasuringTest() {
-    //testWithoutQuadtree();
+    testWithoutQuadtree();
     testWithQuadtree();
 }

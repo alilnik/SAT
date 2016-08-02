@@ -23,6 +23,7 @@ int const FOUR = 4;
 class Quadtree {
 private:
     Quadtree *nodes;
+    Quadtree *parent;
     vector<Shape *> * shapes;
     rect * bounds;
     
@@ -48,6 +49,7 @@ public:
     Quadtree()
     {
         nodes = nullptr;
+        parent = nullptr;
         shapes = new vector<Shape *>();
         bounds = new rect(-1, -1, 1, 1);
     }
@@ -80,7 +82,12 @@ public:
                 shapes->push_back(shape);
             }
         } else {
-            nodes[getIndex(shape->getCenter()) - 1].insert(shape);
+            int idx = getIndex(shape->getCenter()) - 1;
+            if (shape->isInside(nodes[idx].bounds)) {
+                nodes[idx].insert(shape);
+            } else {
+                shapes->push_back(shape);
+            }
         }
     }
     
@@ -97,11 +104,16 @@ public:
         nodes[2].setBounds(new rect(x0, y0, x1, y1));
         nodes[1].setBounds(new rect(x0, y1, x1, y2));
         nodes[0].setBounds(new rect(x1, y1, x2, y2));
-        for (int i = 0; i < shapes->size(); i++) {
-            int ind = getIndex(shapes->at(i)->getCenter()) - 1;
-            nodes[ind].insert(shapes->at(i));
+        
+        vector<Shape *> * oldShapes = shapes;
+        shapes = new vector<Shape *>();
+        for (int i = 0; i < oldShapes->size(); i++) {
+            //int ind = getIndex(shapes->at(i)->getCenter()) - 1;
+            //nodes[ind].insert(shapes->at(i));
+            insert(oldShapes->at(i));
         }
-        shapes->clear();
+        delete oldShapes;
+        //shapes->clear();
     }
     
     vector<Shape *> getNeighbours(Shape shape) {
@@ -122,9 +134,6 @@ public:
     
     /* return elements if it is leaf node, otherwise nullptr */
     vector<Shape *> * getElements() {
-        if (nodes != nullptr) {
-            return nullptr;
-        }
         return shapes;
     }
     
@@ -156,11 +165,46 @@ public:
     }
     
     int size() {
-        if (nodes == nullptr) {
-            return shapes->size();
+        int result = 0;
+        result += shapes->size();
+        if (nodes != nullptr) {
+            result += nodes[0].size() + nodes[1].size() + nodes[2].size() + nodes[3].size();
         }
-        return nodes[0].size() + nodes[1].size() + nodes[2].size() + nodes[3].size();
+        return result;
     }
+    
+    Quadtree * getParentNode() {
+        return parent;
+    }
+    
+    vector<Quadtree *> getAllNodes() {
+        vector<Quadtree *> result;
+        result.push_back(this);
+        if (nodes == nullptr) {
+            
+        } else {
+            auto leafnodes0 = nodes[0].getAllNodes();
+            auto leafnodes1 = nodes[1].getAllNodes();
+            auto leafnodes2 = nodes[2].getAllNodes();
+            auto leafnodes3 = nodes[3].getAllNodes();
+            for (int i = 0; i < leafnodes0.size(); i++) {
+                result.push_back(leafnodes0.at(i));
+            }
+            for (int i = 0; i < leafnodes1.size(); i++) {
+                result.push_back(leafnodes1.at(i));
+            }
+            for (int i = 0; i < leafnodes2.size(); i++) {
+                result.push_back(leafnodes2.at(i));
+            }
+            for (int i = 0; i < leafnodes3.size(); i++) {
+                result.push_back(leafnodes3.at(i));
+            }
+        }
+        
+        
+        return result;
+    }
+
 };
 
 #endif /* quadtree_hpp */

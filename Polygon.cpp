@@ -63,3 +63,13 @@ Point Polygon::getCenter() {
     
     return Point(x, y);
 }
+
+bool Polygon::isInside(rect * r) {
+    
+    for (int i = 0; i < points->size(); i++) {
+        if (!r->isInside(points->at(i))) {
+            return false;
+        }
+    }
+    return true;
+}
